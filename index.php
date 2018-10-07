@@ -1,19 +1,26 @@
+<head>
+	<meta charset="UTF-8">
+</head>
 <?
-	$arrImg = array_diff(scandir("small-img"), array('..', '.'));
-	$cTableRows =ceil(count($arrImg)/3);
-	$cRowElem = 0;
-	/*$arrImg = glob("small-img/{*.png,*.jpeg,*.jpg,*.gif}", GLOB_BRACE);*/
+	include 'config.php';
+	
+	$sql = "SELECT * FROM image_table ORDER BY rating DESC";
+	$res = mysqli_query($cn,$sql);
+	
 	echo '<table border="1" width="100%" height="100%">
 	<tr>
 		<td colspan = "3" height="50px">header</td>
 	</tr>';
-	foreach ($arrImg as $value) {
+	
+	$cRowElem = 0;
+	
+	while($data = mysqli_fetch_assoc($res)){
 		if ($cRowElem == 0)
 			echo '<tr>';
 		
 		echo '
-			<td align="center"><a href="big-img/' . $value . '" target="_blank">
-				<img src="small-img/' . $value . '" alt="img">
+			<td align="center"><a href="fullscreenimg.php/?id=' . $data[id] . '">
+				<img src="' . $data[path_small] . '" alt="img">
 			</a></td>
 			'
 		;
@@ -23,6 +30,7 @@
 			$cRowElem = 0;
 		}
 	}
+
 	echo '<tr>
 		<td colspan ="3" height="150px">footer</td>
 	</tr>
